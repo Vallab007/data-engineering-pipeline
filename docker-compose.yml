@@ -21,7 +21,7 @@ services:
     container_name: kafka-ui-1
     image: provectuslabs/kafka-ui:latest
     ports:
-      - 8000:8080
+      - "8000:8080"
     depends_on:
       - kafka
     environment:
@@ -41,7 +41,23 @@ services:
     networks:
       - airflow-kafka
 
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: events_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - airflow-kafka
 
 networks:
   airflow-kafka:
     external: true
+
+volumes:
+  postgres_data:
